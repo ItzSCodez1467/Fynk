@@ -62,6 +62,8 @@ class TokenStream:
         self.pos = -1
         self.filepath = filepath
 
+        self.advance()
+
     @property
     def current(self):
         if self.pos < 0 or self.pos >= len(self.tokens):

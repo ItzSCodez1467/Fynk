@@ -26,5 +26,3 @@ def error(fp, ln, msg, hint=None):
         print(f"{Fore.MAGENTA}Hint:{Style.RESET_ALL} {hint}")
 
     exit(1)
-
-error('.gitignore', 41, 'This is a test error message.', 'Check your syntax.')

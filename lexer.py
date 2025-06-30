@@ -1,6 +1,7 @@
 from errors import error
 from keywords import keywords
 from tokens import Token, TokenType, TokenStream
+from parser import Parser
 
 
 class Lexer:
@@ -174,7 +175,7 @@ class Lexer:
             startLn, startCol = self.ln, self.col
             self.advance()
             self.advance()
-            return Token(TokenType.EQUAL, '!=', startLn, startCol)
+            return Token(TokenType.NOT_EQUAL, '!=', startLn, startCol)
 
         # LESS THAN
         if self.current == '<' and self.peek() != '=':
@@ -288,6 +289,12 @@ class Lexer:
             self.advance()
             return Token(TokenType.COLON, ':', startLn, startCol)
 
+        # SEMICOLON
+        if self.current == ';':
+            startLn, startCol = self.ln, self.col
+            self.advance()
+            return Token(TokenType.SEMICOLON, ';', startLn, startCol)
+
         # Unexpected character
         error(self.fp, self.ln, f"LexerError: Unexpected character '{self.current}'", "Check your syntax.")
         return None
@@ -306,3 +313,7 @@ if __name__ == "__main__":
     lexer = Lexer('example.fynk')
     token_stream = lexer.tokenize()
     print(token_stream)
+    parser = Parser(token_stream)
+    program = parser.parse_program()
+
+    print(program) # AST

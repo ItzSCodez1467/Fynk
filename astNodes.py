@@ -12,6 +12,10 @@ class ASTNode:
             return value.to_dict()
         elif isinstance(value, list):
             return [self._serialize(v) for v in value]
+        elif hasattr(value, "to_dict") and callable(value.to_dict):
+            return value.to_dict()
+        elif callable(value):
+            return f"<function {value.__name__}>"
         else:
             return value
 
@@ -40,7 +44,7 @@ class StringLiteral(ASTNode):
         self.col = col
         self.value = value
 
-class IdentifierLiteral(ASTNode):
+class Identifier(ASTNode):
     def __init__(self, name, ln, col):
         self.ln = ln
         self.col = col
@@ -59,10 +63,12 @@ class BooleanLiteral(ASTNode):
         self.value = value
 
 class BinaryExpression(ASTNode):
-    def __init__(self, left, operator, right):
+    def __init__(self, left, operator, right, ln, col):
         self.left = left
         self.operator = operator
         self.right = right
+        self.ln = ln
+        self.col = col
 
 class AssignmentExpression(ASTNode):
     def __init__(self, target, value, ln, col):
@@ -104,9 +110,3 @@ class DecrementExpression(ASTNode):
         self.ln = ln
         self.col = col
         self.target = target
-
-class Delimiter(ASTNode):
-    def __init__(self, value, ln, col):
-        self.ln = ln
-        self.col = col
-        self.value = value

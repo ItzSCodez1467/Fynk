@@ -39,6 +39,7 @@ class TokenType(Enum):
     COMMA = 'COMMA'
     DOT = 'DOT'
     COLON = 'COLON'
+    SEMICOLON = 'SEMICOLON'
 
 class Token:
     def __init__(self, type_, value, ln, col):
@@ -47,14 +48,16 @@ class Token:
         self.ln = ln
         self.col = col
 
-    def __repr__(self):
-        return str({
-            'kind': 'Token',
-            'type': self.type,
-            'self.value': self.value,
+    def to_dict(self):
+        return {
+            'type': self.type.value,
+            'value': self.value,
             'line': self.ln,
             'column': self.col
-        })
+        }
+
+    def __repr__(self):
+        return str(self.to_dict())
 
 class TokenStream:
     def __init__(self, tokens, filepath):

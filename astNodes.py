@@ -110,3 +110,10 @@ class DecrementExpression(ASTNode):
         self.ln = ln
         self.col = col
         self.target = target
+
+class FuncCall(ASTNode):
+    def __init__(self, name, args, ln, col):
+        self.ln = ln
+        self.col = col
+        self.name = name
+        self.args = args

@@ -141,8 +141,31 @@ class Parser:
         self.consume(TokenType.SEMICOLON)
         return main_node
 
+    def builtinCall(self):
+        func_ = self.current
+        self.consume(TokenType.KEYWORD)
+        self.consume(TokenType.LEFT_PAREN)
+        if self.tokens.peek() == TokenType.RIGHT_PAREN:
+            self.consume(TokenType.RIGHT_PAREN)
+            return FuncCall(func_, [], func_.ln, func_.col)
+
+        args = [self.expr()]
+
+        while self.current.type == TokenType.COMMA:
+            self.consume(TokenType.COMMA)
+            args.append(self.expr())
+        self.consume(TokenType.RIGHT_PAREN)
+
+        return FuncCall(func_, args, func_.ln, func_.col)
+
+    def builtinCall_stmt(self):
+        main_node = self.builtinCall()
+        self.consume(TokenType.SEMICOLON)
+        return main_node
+
+
     def parse_program(self):
         stmts = []
         while self.current.type != TokenType.EOF:
-            stmts.append(self.ieq_stmt())
+           stmts.append(self.builtinCall_stmt())
         return Program(stmts)

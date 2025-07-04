@@ -22,4 +22,7 @@ eq_stmt -> eq ';'
 
 ieq -> expr '!=' expr
 ieq_stmt -> ieq ';'
+
+builtinCall -> KEYWORD '(' (expr (',' expr)*)? ')'
+builtinCall_stmt -> builtinCall ';'
 ```

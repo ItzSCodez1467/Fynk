@@ -34,8 +34,9 @@ class Lexer:
                 self.col += 1
 
     def peek(self, distance=1):
-        if self.pos + distance < len(self.source):
-            return self.source[self.pos + distance]
+        target = self.pos + distance
+        if 0 <= target < len(self.source):
+            return self.source[target]
         return None
 
     def skipIrrelevant(self):
@@ -119,6 +120,9 @@ class Lexer:
 
         # EOF
         if self.current is None:
+            prev = self.peek(-1)
+            if prev == '\n':
+                return Token(TokenType.EOF, '', self.ln - 1, 0)
             return Token(TokenType.EOF, '', self.ln, self.col)
 
         # INT / FLOAT

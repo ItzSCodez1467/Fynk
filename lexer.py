@@ -316,7 +316,6 @@ class Lexer:
 if __name__ == "__main__":
     lexer = Lexer('example.fynk')
     token_stream = lexer.tokenize()
-    print(token_stream)
     parser = Parser(token_stream)
     program = parser.parse_program()
 

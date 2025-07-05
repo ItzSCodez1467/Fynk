@@ -25,4 +25,14 @@ ieq_stmt -> ieq ';'
 
 builtinCall -> KEYWORD '(' (expr (',' expr)*)? ')'
 builtinCall_stmt -> builtinCall ';'
+
+  primary -> 
+    expr_stmt 
+  | increment_stmt 
+  | decrement_stmt 
+  | assignment_stmt 
+  | eq_stmt 
+  | ieq_stmt 
+  | builtinCall_stmt
+
 ```

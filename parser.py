@@ -145,7 +145,9 @@ class Parser:
         func_ = self.current
         self.consume(TokenType.KEYWORD)
         self.consume(TokenType.LEFT_PAREN)
-        if self.tokens.peek() == TokenType.RIGHT_PAREN:
+        print("Peeking token before deciding on args:", self.tokens.peek())
+
+        if self.current.type == TokenType.RIGHT_PAREN:
             self.consume(TokenType.RIGHT_PAREN)
             return FuncCall(func_, [], func_.ln, func_.col)
 
@@ -163,9 +165,23 @@ class Parser:
         self.consume(TokenType.SEMICOLON)
         return main_node
 
+    def parse_primary(self):
+        if self.current.type == TokenType.INCREMENT or self.tokens.peek().type == TokenType.INCREMENT:
+            return self.increment_stmt()
+        elif self.current.type == TokenType.DECREMENT or self.tokens.peek().type == TokenType.DECREMENT:
+            return self.decrement_stmt()
+        elif self.tokens.peek().type == TokenType.ASSIGN:
+            return self.assignment_stmt()
+        elif self.tokens.peek().type == TokenType.EQUAL:
+            return self.eq_stmt()
+        elif self.tokens.peek().type == TokenType.NOT_EQUAL:
+            return self.ieq_stmt()
+        elif self.current.type == TokenType.KEYWORD and self.tokens.peek().type == TokenType.LEFT_PAREN:
+            return self.builtinCall_stmt()
+        else: return self.expr_stmt() # Could be expr
 
     def parse_program(self):
         stmts = []
         while self.current.type != TokenType.EOF:
-           stmts.append(self.builtinCall_stmt())
+           stmts.append(self.parse_primary())
         return Program(stmts)

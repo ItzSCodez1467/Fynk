@@ -1,3 +1,3 @@
 keywords = [
-    'print'
+    'print', 'exit'
 ]

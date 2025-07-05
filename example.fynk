@@ -1,1 +1,4 @@
-print("Hello");
+x = 5;
+x++;
+print(x*5);
+exit();
